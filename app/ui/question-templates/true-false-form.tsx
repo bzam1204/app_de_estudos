@@ -11,9 +11,8 @@ type QuestionState = {
 }
 
 const TrueFalseForm: React.FC = () => {
-    const initialState: QuestionState = { message: null, errors: {} };
 
-    const [state, formAction] = useActionState(createQuestion, initialState);
+    const [state, formAction] = useActionState(createQuestion, undefined);
 
     1
     return (
@@ -60,7 +59,7 @@ const TrueFalseForm: React.FC = () => {
                 <button type="submit" className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-md shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-75" >
                     {"Criar Questão"}
                 </button>
-                {state.message && <p className="mt-2 text-sm text-green-500">{state.message}</p>}
+                {state?.message && <p className="mt-2 text-sm text-green-500">{state.message}</p>}
             </form>
         </div>
     );

@@ -7,7 +7,7 @@ import { deleteQuestion } from '../lib/actions';
 const QuestionCardReadOnly: React.FC<Question> = ({ id, body }) => {
     const [state, formAction, isPending] = useActionState(deleteQuestion, undefined)
 
-    const handleDeleteClick = (event) => {
+    const handleDeleteClick = (event: any) => {
         const isConfirmed = window.confirm("Tem certeza de que deseja deletar esta questão?");
         if (!isConfirmed) {
             event.preventDefault();
