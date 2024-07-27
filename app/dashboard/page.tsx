@@ -1,4 +1,5 @@
 import React from 'react';
+import QuestionListForToday from '../ui/question-list-for-today';
 
 interface Props {
     // Define the props for your component here
@@ -10,6 +11,7 @@ const Page: React.FC<Props> = (props) => {
     return (
         <div>
             dashboard
+            <QuestionListForToday />
         </div>
     );
 };

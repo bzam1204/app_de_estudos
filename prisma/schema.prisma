@@ -9,32 +9,34 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Question {
-  id              String           @id @default(cuid())
-  title           String?
-  body            String
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  userId          String
-  explanation     String           @default("Pergunte ao seu professor")
-  correctAnswer   Boolean?
-  typeId          String
-  type            QuestionType     @relation(fields: [typeId], references: [id])
-  user            User             @relation(fields: [userId], references: [id])
-  questionOptions QuestionOption[]
+  id                   String                 @id @default(cuid())
+  title                String?
+  body                 String
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  userId               String
+  explanation          String                 @default("Pergunte ao seu professor")
+  correctAnswer        Boolean?
+  typeId               String
+  type                 QuestionType           @relation(fields: [typeId], references: [id])
+  user                 User                   @relation(fields: [userId], references: [id])
+  questionOptions      QuestionOption[]
+  FibonacciQuestionLog FibonacciQuestionLog[]
 }
 
 model QuestionType {
-  id        String            @id @default(cuid())
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-  name      QuestionTypeName?
-  questions Question[]
+  id                   String                 @id @default(cuid())
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  name                 QuestionTypeName?
+  questions            Question[]
+  fibonacciQuestionLog FibonacciQuestionLog[]
 }
 
 model Option {
@@ -73,12 +75,28 @@ enum QuestionTypeName {
   DRAG_AND_DROP
 }
 
-
 model User {
-  id            String          @id @default(cuid())
-  email         String?          @unique
-  password      String?
-  questions Question[] 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-} 
+  id                   String                 @id @default(cuid())
+  email                String?                @unique
+  password             String?
+  questions            Question[]
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  fibonacciQuestionLog FibonacciQuestionLog[]
+}
+
+model FibonacciQuestionLog {
+  id               String        @id @default(cuid())
+  questionId       String
+  userId           String
+  questionTypeId   String
+  fibonacciIndex   Int
+  nextRevisionDate DateTime
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  question         Question      @relation(fields: [questionId], references: [id])
+  user             User          @relation(fields: [userId], references: [id])
+  QuestionType     QuestionType @relation(fields: [questionTypeId], references: [id])
+
+  @@unique([questionId, userId, fibonacciIndex])
+}

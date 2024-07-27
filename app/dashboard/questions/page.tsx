@@ -1,15 +1,18 @@
-import React from 'react';
+import Questions from '@/app/ui/questions';
+import React, { Suspense } from 'react';
 
 interface Props {
     // Define the props for your component here
 }
 
-const Page: React.FC<Props> = (props) => {
+const Page: React.FC<Props> = async (props) => {
     // Add your component logic here
 
     return (
-        <div>
-            questions
+        <div className='flex justify-center items-center'>
+            <Suspense fallback={<>loading...</>}>
+                <Questions />
+            </Suspense>
         </div>
     );
 };

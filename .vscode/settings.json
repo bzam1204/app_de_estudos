@@ -5,6 +5,9 @@
         "headlessui",
         "heroicons",
         "ossp",
-        "postgres"
-    ]
+        "postgres",
+        "tailwindcss"
+    ],
+    "WillLuke.nextjs.addTypesOnSave": true,
+    "WillLuke.nextjs.hasPrompted": true,
 }

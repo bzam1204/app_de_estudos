@@ -1,15 +1,13 @@
+import QuestionForm from '@/app/ui/question-form';
 import React from 'react';
 
-interface Props {
-    // Define the props for your component here
-}
-
-const Page: React.FC<Props> = (props) => {
-    // Add your component logic here
+const Page: React.FC = () => {
+//create var string
+  
 
     return (
-        <div>
-            create question
+        <div className="flex flex-col gap-6 justify-start items-center h-screen">
+            <QuestionForm />      
         </div>
     );
 };
