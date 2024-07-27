@@ -1,5 +1,5 @@
 "use server";
-import { PrismaClient, Question } from "@prisma/client";
+import { FibonacciQuestionLog, PrismaClient, Question } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
@@ -49,9 +49,15 @@ export async function createQuestion(prevState: any, formData: FormData) {
             },
         });
 
+        const revision = await createOrUpdateFibonacciLog(
+            newQuestion.id,
+            fields.userId
+        );
+
         return {
             message: "Question created",
             question: newQuestion,
+            revision: revision,
         };
     } catch (error) {
         console.error("Error creating question:", error);
@@ -150,4 +156,55 @@ async function deleteQuestionWithRelations(questionId: string) {
     return transaction;
 }
 
+const fibonacci = (num: number): number[] => {
+    let fib: number[] = [0, 1];
+    while (true) {
+        const nextFib = fib[fib.length - 1] + fib[fib.length - 2];
+        if (nextFib > num) break;
+        fib.push(nextFib);
+    }
+    return fib;
+};
 
+export async function createOrUpdateFibonacciLog(
+    questionId: string,
+    userId: string
+): Promise<void> {
+    // Obter o log de revisão mais recente para esta questão e usuário
+    const latestLog: FibonacciQuestionLog | null =
+        await prisma.fibonacciQuestionLog.findFirst({
+            where: { questionId, userId },
+            orderBy: { fibonacciIndex: "desc" },
+        });
+
+    // Determinar o próximo índice de Fibonacci
+    const nextFibonacciIndex: number = latestLog
+        ? latestLog.fibonacciIndex + 1
+        : 1;
+    const nextFibValue: number = fibonacci(nextFibonacciIndex).pop() as number;
+
+    // Calcular a próxima data de revisão com base no índice de Fibonacci
+    const nextRevisionDate: Date = new Date();
+    nextRevisionDate.setDate(nextRevisionDate.getDate() + nextFibValue);
+
+    // Criar ou atualizar o log de revisão
+    await prisma.fibonacciQuestionLog.upsert({
+        where: {
+            questionId_userId_fibonacciIndex: {
+                questionId,
+                userId,
+                fibonacciIndex: nextFibonacciIndex,
+            },
+        },
+        update: {
+            nextRevisionDate,
+            updatedAt: new Date(),
+        },
+        create: {
+            questionId,
+            userId,
+            fibonacciIndex: nextFibonacciIndex,
+            nextRevisionDate,
+        },
+    });
+}

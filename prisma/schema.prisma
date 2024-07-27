@@ -86,16 +86,16 @@ model User {
 }
 
 model FibonacciQuestionLog {
-  id               String        @id @default(cuid())
+  id               String       @id @default(cuid())
   questionId       String
   userId           String
   questionTypeId   String
   fibonacciIndex   Int
   nextRevisionDate DateTime
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  question         Question      @relation(fields: [questionId], references: [id])
-  user             User          @relation(fields: [userId], references: [id])
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  question         Question     @relation(fields: [questionId], references: [id])
+  user             User         @relation(fields: [userId], references: [id])
   QuestionType     QuestionType @relation(fields: [questionTypeId], references: [id])
 
   @@unique([questionId, userId, fibonacciIndex])
