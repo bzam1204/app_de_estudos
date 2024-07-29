@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
-import { getQuestionTypes } from "../lib/actions";
 import { QuestionType, QuestionTypeName } from "@prisma/client";
 import { questionTypesLabels } from "../lib/questionTypesLabels";
+import {getQuestionTypes} from "@/app/lib/data";
 
 interface Props {
     selection: QuestionTypeName;

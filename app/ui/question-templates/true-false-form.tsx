@@ -1,6 +1,7 @@
 import { createQuestion } from "@/app/lib/actions";
 import { ArrowPathIcon, PlusCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
-import React, { useActionState } from "react";
+import React from "react";
+import { useFormState } from "react-dom";
 
 type QuestionState = {
     errors?: {
@@ -13,7 +14,7 @@ type QuestionState = {
 
 const TrueFalseForm: React.FC = () => {
 
-    const [state, formAction, isPending] = useActionState(createQuestion, undefined);
+    const [state, formAction, isPending] = useFormState(createQuestion, undefined);
 
     1
     return (
@@ -39,7 +40,7 @@ const TrueFalseForm: React.FC = () => {
                     Resposta:
                     <select
                         name="correctAnswer"
-                        required                        
+                        required
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     >
                         <option value={'filled'}>Certa</option>

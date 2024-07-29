@@ -1,11 +1,12 @@
 'use client'
 import { ArrowPathIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { Question } from '@prisma/client';
-import React, { useActionState } from 'react';
+import React from 'react';
 import { deleteQuestion } from '../lib/actions';
+import { useFormState } from 'react-dom';
 
 const QuestionCardReadOnly: React.FC<Question> = ({ id, body }) => {
-    const [state, formAction, isPending] = useActionState(deleteQuestion, undefined)
+    const [state, formAction, isPending] = useFormState(deleteQuestion, undefined)
 
     const handleDeleteClick = (event: any) => {
         const isConfirmed = window.confirm("Tem certeza de que deseja deletar esta questão?");

@@ -4,29 +4,7 @@ import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
-export const getQuestions = async () => {
-    try {
-        return await prisma.question.findMany();
-    } catch (error) {
-        // Handle the error here
-        console.error("Error retrieving questions:", error);
-        throw error; // Rethrow the error to be handled by the caller
-    }
-};
-
-export const getQuestionTypes = async () => {
-    try {
-        return await prisma.questionType.findMany();
-    } catch (error) {
-        // Handle the error here
-        console.error("Error retrieving questions:", error);
-        throw error; // Rethrow the error to be handled by the caller
-    }
-};
-
 export async function createQuestion(prevState: any, formData: FormData) {
-    console.log("dados do formulário: ", formData);
-
     const fields = {
         title: formData.get("title") as string,
         body: formData.get("body") as string,
@@ -68,11 +46,8 @@ export async function createQuestion(prevState: any, formData: FormData) {
 }
 
 export async function deleteQuestion(prevState: any, formData: FormData) {
-    console.log("dados do formulário: ", formData);
     const questionId = formData.get("id") as string;
-    console.log("id da questão: ", questionId);
-
-    // delete question
+   // delete question
     try {
         // First, check if the question exists
         const question = await prisma.question.findUnique({
@@ -84,10 +59,7 @@ export async function deleteQuestion(prevState: any, formData: FormData) {
             // If the question does not exist, return a 404 response
             return { message: "Question not found", status: 404 };
         }
-        console.log("question: ", question);
-
         // If the question exists, proceed to delete it
-
         await prisma.fibonacciQuestionLog.deleteMany({
             where: {
                 questionId: questionId,
@@ -162,12 +134,6 @@ async function deleteQuestionWithRelations(questionId: string) {
     return transaction;
 }
 
-const getTodayDate = () => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Zera as horas para comparar apenas a data
-    return today;
-};
-
 function fibonacci(n: number): number {
     if (n <= 1) {
         return n;
@@ -180,13 +146,7 @@ export async function createOrUpdateFibonacciLog(
     userId: string,
     result?: any
 ): Promise<void> {
-    console.log(
-        "dados: " + " | question_id: ",
-        questionId,
-        " | user id: ",
-        userId
-    );
-
+   
     // Verificar se a questão existe
     const question: Question | null = await prisma.question.findUnique({
         where: { id: questionId },
@@ -212,7 +172,6 @@ export async function createOrUpdateFibonacciLog(
     // Calcular a próxima data de revisão com base no índice de Fibonacci
     const nextRevisionDate: Date = new Date();
 
-    console.log("latest log: ", latestLog);
 
     if (!latestLog) {
         nextRevisionDate.setDate(nextRevisionDate.getDate());
@@ -252,25 +211,3 @@ export async function createOrUpdateFibonacciLog(
         },
     });
 }
-
-export const getQuestionsForToday = async () => {
-    const today = getTodayDate();
-    console.log("today: ", today);
-
-    const logs = await prisma.fibonacciQuestionLog.findMany({
-        where: {
-            userId: "clz3g43fz00049moixkx337j8",
-            done: false,
-            nextRevisionDate: {
-                gte: today,
-                lt: new Date(today.getTime() + 24 * 60 * 60 * 1000), // Adiciona 1 dia para pegar o fim do dia atual
-            },
-        },
-        include: {
-            question: true, // Inclui os detalhes da questão
-            QuestionType: true,
-        },
-    });
-
-    return logs;
-};

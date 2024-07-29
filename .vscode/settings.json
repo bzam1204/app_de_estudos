@@ -11,4 +11,7 @@
     ],
     "WillLuke.nextjs.addTypesOnSave": true,
     "WillLuke.nextjs.hasPrompted": true,
+    "cSpell.ignoreWords": [
+        "Listlength"
+    ],
 }
