@@ -104,8 +104,6 @@ export async function deleteQuestion(prevState: any, formData: FormData) {
             await deleteQuestionWithoutRelations(questionId);
         }
 
-        
-
         revalidatePath("/dashboard/questions");
         // Return a success response
         return {
@@ -170,20 +168,17 @@ const getTodayDate = () => {
     return today;
 };
 
-const fibonacci = (num: number): number[] => {
-    let fib: number[] = [0, 1];
-    while (true) {
-        const nextFib = fib[fib.length - 1] + fib[fib.length - 2];
-        if (nextFib > num) break;
-        fib.push(nextFib);
+function fibonacci(n: number): number {
+    if (n <= 1) {
+        return n;
     }
-    return fib;
-};
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
 
 export async function createOrUpdateFibonacciLog(
     questionId: string,
     userId: string,
-    result: any | null | undefined
+    result?: any
 ): Promise<void> {
     console.log(
         "dados: " + " | question_id: ",
@@ -211,8 +206,8 @@ export async function createOrUpdateFibonacciLog(
     // Determinar o próximo índice de Fibonacci
     const nextFibonacciIndex: number = latestLog
         ? latestLog.fibonacciIndex + 1
-        : 1;
-    const nextFibValue: number = fibonacci(nextFibonacciIndex).pop() as number;
+        : 0;
+    const nextFibValue = fibonacci(nextFibonacciIndex);
 
     // Calcular a próxima data de revisão com base no índice de Fibonacci
     const nextRevisionDate: Date = new Date();
@@ -220,16 +215,8 @@ export async function createOrUpdateFibonacciLog(
     console.log("latest log: ", latestLog);
 
     if (!latestLog) {
-        console.log(
-            "primeira vez: ",
-            nextRevisionDate.setDate(nextRevisionDate.getDate())
-        );
         nextRevisionDate.setDate(nextRevisionDate.getDate());
     } else {
-        console.log(
-            "segunda em diante: ",
-            nextRevisionDate.setDate(nextRevisionDate.getDate() + nextFibValue)
-        );
         nextRevisionDate.setDate(nextRevisionDate.getDate() + nextFibValue);
 
         await prisma.fibonacciQuestionLog.update({
@@ -241,7 +228,7 @@ export async function createOrUpdateFibonacciLog(
         });
     }
 
-    nextRevisionDate.setHours(0,0,0,0)
+    nextRevisionDate.setHours(0, 0, 0, 0);
 
     // Criar ou atualizar o log de revisão
     await prisma.fibonacciQuestionLog.upsert({
@@ -268,6 +255,7 @@ export async function createOrUpdateFibonacciLog(
 
 export const getQuestionsForToday = async () => {
     const today = getTodayDate();
+    console.log("today: ", today);
 
     const logs = await prisma.fibonacciQuestionLog.findMany({
         where: {

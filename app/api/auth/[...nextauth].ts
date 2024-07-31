@@ -14,10 +14,10 @@ export default NextAuth({
       },
       authorize: async (credentials) => {
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
+          where: { email: credentials!.email }
         });
 
-        if (user && user.password === credentials.password) {
+        if (user && user.password === credentials!.password) {
           return user;
         } else {
           return null;
@@ -32,19 +32,5 @@ export default NextAuth({
     verifyRequest: "/auth/verify-request",
     newUser: "/auth/new-user"
   },
-  session: {
-    jwt: true
-  },
-  callbacks: {
-    async jwt(token, user) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    },
-    async session(session, token) {
-      session.user.id = token.id;
-      return session;
-    }
-  }
+  
 });
