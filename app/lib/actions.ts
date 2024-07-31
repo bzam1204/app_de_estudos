@@ -1,5 +1,5 @@
 "use server";
-import { PrismaClient, Question } from "@prisma/client";
+import { FibonacciQuestionLog, PrismaClient, Question } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
@@ -49,9 +49,15 @@ export async function createQuestion(prevState: any, formData: FormData) {
             },
         });
 
+        const revision = await createOrUpdateFibonacciLog(
+            newQuestion.id,
+            fields.userId
+        );
+
         return {
             message: "Question created",
             question: newQuestion,
+            revision: revision,
         };
     } catch (error) {
         console.error("Error creating question:", error);
@@ -81,6 +87,12 @@ export async function deleteQuestion(prevState: any, formData: FormData) {
         console.log("question: ", question);
 
         // If the question exists, proceed to delete it
+
+        await prisma.fibonacciQuestionLog.deleteMany({
+            where: {
+                questionId: questionId,
+            },
+        });
 
         if (question.type.name === "MULTIPLE_CHOICE") {
             // If the question is of type "Multiple Choice",
@@ -150,4 +162,115 @@ async function deleteQuestionWithRelations(questionId: string) {
     return transaction;
 }
 
+const getTodayDate = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Zera as horas para comparar apenas a data
+    return today;
+};
 
+function fibonacci(n: number): number {
+    if (n <= 1) {
+        return n;
+    }
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+export async function createOrUpdateFibonacciLog(
+    questionId: string,
+    userId: string,
+    result?: any
+): Promise<void> {
+    console.log(
+        "dados: " + " | question_id: ",
+        questionId,
+        " | user id: ",
+        userId
+    );
+
+    // Verificar se a questão existe
+    const question: Question | null = await prisma.question.findUnique({
+        where: { id: questionId },
+    });
+
+    if (!question) {
+        throw new Error(`Question with id ${questionId} does not exist.`);
+    }
+
+    // Obter o log de revisão mais recente para esta questão e usuário
+    const latestLog: FibonacciQuestionLog | null =
+        await prisma.fibonacciQuestionLog.findFirst({
+            where: { questionId, userId },
+            orderBy: { fibonacciIndex: "desc" },
+        });
+
+    // Determinar o próximo índice de Fibonacci
+    const nextFibonacciIndex: number = latestLog
+        ? latestLog.fibonacciIndex + 1
+        : 0;
+    const nextFibValue = fibonacci(nextFibonacciIndex);
+
+    // Calcular a próxima data de revisão com base no índice de Fibonacci
+    const nextRevisionDate: Date = new Date();
+
+    console.log("latest log: ", latestLog);
+
+    if (!latestLog) {
+        nextRevisionDate.setDate(nextRevisionDate.getDate());
+    } else {
+        nextRevisionDate.setDate(nextRevisionDate.getDate() + nextFibValue);
+
+        await prisma.fibonacciQuestionLog.update({
+            where: { id: latestLog.id },
+            data: {
+                done: true,
+                result: result,
+            },
+        });
+    }
+
+    nextRevisionDate.setHours(0, 0, 0, 0);
+
+    // Criar ou atualizar o log de revisão
+    await prisma.fibonacciQuestionLog.upsert({
+        where: {
+            questionId_userId_fibonacciIndex: {
+                questionId,
+                userId,
+                fibonacciIndex: nextFibonacciIndex,
+            },
+        },
+        update: {
+            nextRevisionDate,
+            updatedAt: new Date(),
+        },
+        create: {
+            questionId,
+            userId,
+            fibonacciIndex: nextFibonacciIndex,
+            nextRevisionDate,
+            questionTypeId: question.typeId,
+        },
+    });
+}
+
+export const getQuestionsForToday = async () => {
+    const today = getTodayDate();
+    console.log("today: ", today);
+
+    const logs = await prisma.fibonacciQuestionLog.findMany({
+        where: {
+            userId: "clz3g43fz00049moixkx337j8",
+            done: false,
+            nextRevisionDate: {
+                gte: today,
+                lt: new Date(today.getTime() + 24 * 60 * 60 * 1000), // Adiciona 1 dia para pegar o fim do dia atual
+            },
+        },
+        include: {
+            question: true, // Inclui os detalhes da questão
+            QuestionType: true,
+        },
+    });
+
+    return logs;
+};

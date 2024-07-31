@@ -8,7 +8,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: any ) => {
     e.preventDefault();
     const res = await fetch("/api/auth/register", {
       method: "POST",

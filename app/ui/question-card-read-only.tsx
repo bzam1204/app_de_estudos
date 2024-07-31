@@ -20,7 +20,7 @@ const QuestionCardReadOnly: React.FC<Question> = ({ id, body }) => {
         >
             <p>{body}</p>
             <form action={formAction} className='flex flex-col gap-3 justify-around'>
-                <input type="text" name='id' hidden value={id} />
+                <input type="text" name='id' readOnly hidden value={id} />
                 <button type='submit' aria-label={"delete question"} onClick={handleDeleteClick}>
                     {isPending ?
                         <ArrowPathIcon className='animate-spin' width={20} /> :
