@@ -1,20 +1,23 @@
 import { createQuestion } from "@/app/lib/actions";
 import { ArrowPathIcon, PlusCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 
-type QuestionState = {
-    errors?: {
-        customerId?: string[];
-        amount?: string[];
-        status?: string[];
-    };
-    message?: string | null;
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <button type="submit" className="flex justify-center items-center gap-2 px-4 py-2 bg-amber-500 text-white font-semibold rounded-md shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-75" >
+            {pending ?
+                <ArrowPathIcon className='animate-spin' width={20} /> :
+                <PlusCircleIcon width={20} />}
+            Criar Questão
+        </button>
+    );
 }
 
-const TrueFalseForm: React.FC = () => {
+export default function TrueFalseForm() {
 
-    const [state, formAction, isPending] = useFormState(createQuestion, undefined);
+    const [state, formAction] = useFormState(createQuestion, undefined);
 
     1
     return (
@@ -58,17 +61,17 @@ const TrueFalseForm: React.FC = () => {
                     ></textarea>
                 </label>
 
-                <button type="submit" className="flex justify-center items-center gap-2 px-4 py-2 bg-amber-500 text-white font-semibold rounded-md shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-75" >
+                {/* <button type="submit" className="flex justify-center items-center gap-2 px-4 py-2 bg-amber-500 text-white font-semibold rounded-md shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-75" >
                     {isPending ?
                         <ArrowPathIcon className='animate-spin' width={20} /> :
                         <PlusCircleIcon width={20} />}
                     Criar Questão
-                </button>
+                </button> */}
+
+                <SubmitButton />
 
                 {state?.message && <p className="mt-2 text-sm text-green-500">{state.message}</p>}
             </form>
         </div>
     );
 };
-
-export default TrueFalseForm;

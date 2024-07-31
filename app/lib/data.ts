@@ -27,13 +27,15 @@ export async function getQuestionTypes() {
 export async function getQuestionsForToday(path?: string) {
     try {
         const today = getTodayDate();
+        const tomorrow: Date = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
         const logs = await prisma.fibonacciQuestionLog.findMany({
             where: {
                 userId: "clz3g43fz00049moixkx337j8",
                 done: false,
                 nextRevisionDate: {
                     gte: today,
-                    lt: new Date(today.getTime()), // Adiciona 1 dia para pegar o fim do dia atual
+                    lt: tomorrow, // Adiciona 1 dia para pegar o fim do dia atual
                 },
             },
             include: {
