@@ -1,7 +1,4 @@
 import React from 'react';
-import {Simulate} from "react-dom/test-utils";
-import mouseLeave = Simulate.mouseLeave;
-
 interface Props {
     className?: string;
     text?: string;
@@ -22,7 +19,7 @@ function Tooltip({className = '', text = '', onMouseEnter, onMouseLeave}: Props)
                     onMouseEnter(event)
                 }
             }}
-            className={`${className} text-xl p-4 absolute h-fit w-full max-w-xl right- bg-white border-x-amber-400 border-x-8 rounded drop-shadow-lg `}
+            className={`${className} delay-1000 text-sm p-4 absolute right-0 top-0 h-fit w-full max-w-xl bg-white border-x-amber-400 border-x-8 rounded drop-shadow-lg `}
         >
             {text && (text)}
         </div>

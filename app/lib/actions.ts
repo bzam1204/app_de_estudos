@@ -47,7 +47,7 @@ export async function createQuestion(prevState: any, formData: FormData) {
 
 export async function deleteQuestion(prevState: any, formData: FormData) {
     const questionId = formData.get("id") as string;
-   // delete question
+    // delete question
     try {
         // First, check if the question exists
         const question = await prisma.question.findUnique({
@@ -146,7 +146,6 @@ export async function createOrUpdateFibonacciLog(
     userId: string,
     result?: any
 ): Promise<void> {
-   
     // Verificar se a questão existe
     const question: Question | null = await prisma.question.findUnique({
         where: { id: questionId },
@@ -171,7 +170,6 @@ export async function createOrUpdateFibonacciLog(
 
     // Calcular a próxima data de revisão com base no índice de Fibonacci
     const nextRevisionDate: Date = new Date();
-
 
     if (!latestLog) {
         nextRevisionDate.setDate(nextRevisionDate.getDate());
@@ -211,3 +209,4 @@ export async function createOrUpdateFibonacciLog(
         },
     });
 }
+
