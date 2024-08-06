@@ -34,7 +34,6 @@ export async function getQuestionsForToday(path?: string) {
                 userId: "clz3g43fz00049moixkx337j8",
                 done: false,
                 nextRevisionDate: {
-                    gte: today,
                     lt: tomorrow, // Adiciona 1 dia para pegar o fim do dia atual
                 },
             },
