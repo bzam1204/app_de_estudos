@@ -3,9 +3,11 @@ import React from 'react';
 
 interface ButtonProps {
     pending?: boolean;
+    label?: string;
+    Icon?:  React.ComponentType<any>
 }
 
-const Button: React.FC<ButtonProps> = ({ pending }) => {
+const Button: React.FC<ButtonProps> = ({ pending, label, Icon }) => {
     return (
         <button
             type="submit"
@@ -14,10 +16,9 @@ const Button: React.FC<ButtonProps> = ({ pending }) => {
             {pending ? (
                 <ArrowPathIcon className='animate-spin' width={20} />
             ) : (
-                <PlusCircleIcon width={20} />
+                Icon && <Icon width={20} />
             )}
-            Criar Questão
-        </button>
+{label}        </button>
     );
 };
 

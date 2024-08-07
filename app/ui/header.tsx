@@ -1,17 +1,17 @@
 'use client'
 // components/Header.js
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import clsx from 'clsx';
-import {usePathname} from "next/navigation";
-import {DocumentIcon, DocumentPlusIcon, HomeIcon} from "@heroicons/react/24/outline";
+import { usePathname } from "next/navigation";
+import { DocumentIcon, DocumentPlusIcon, HomeIcon } from "@heroicons/react/24/outline";
+import NavItem from "./create-questions-menu";
 
 const navigation = [
-    {name: 'Painel', href: '/dashboard', current: true, icon: HomeIcon},
-    {name: 'Questões', href: '/dashboard/questions', current: false, icon: DocumentIcon},
-    {name: 'Criar Questão', href: '/dashboard/questions/create', current: false, icon: DocumentPlusIcon},
+    { name: 'Painel', href: '/dashboard', current: true, icon: HomeIcon },
+    { name: 'Questões', href: '/dashboard/questions', current: false, icon: DocumentIcon },
+    { name: 'Criar Questão', href: '/dashboard/questions/create', current: false, icon: DocumentPlusIcon },
 ]
-
 
 const Header = () => {
     const pathname = usePathname();
@@ -23,18 +23,24 @@ const Header = () => {
                 <h1 className="text-gray-900">App | Minhas Questões</h1>
             </Link>
             <nav className="flex gap-4">
-                {navigation.map((item) => (
-                    <Link key={item.name} href={item.href}>
+                {navigation.map((item, index) => {
+                    if (item.name === 'Criar Questão') {
+                        return (
+                            <NavItem key={index} />
+                        )
+                    }
+
+                    return (<Link key={item.name} href={item.href}>
                         <div
                             className={clsx("flex gap-2 transition-all  transition-delay-500  rounded font-bold text-gray-800 hover:text-amber-500 px-2 py-1", {
                                 'bg-gray-400  hover:text-white hover:bg-amber-500    text-white': pathname === item.href,
                             })}>
-                            {item.icon && <item.icon width={20}/>}
+                            {item.icon && <item.icon width={20} />}
                             {item.name}
 
                         </div>
-                    </Link>
-                ))}
+                    </Link>)
+                })}
             </nav>
         </header>
     );

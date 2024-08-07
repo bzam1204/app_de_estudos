@@ -13,7 +13,7 @@ import DragAndDropForm from "@/app/ui/question-form-templates/drag-and-drop-form
 import { QuestionTypeName } from '@prisma/client';
 
 export default function renderQuestionForm(selection: QuestionTypeName) {
-    switch (selection) {
+    switch (selection.toUpperCase()) {
         case 'TRUE_FALSE':
             return <TrueFalseForm />;
         case 'FLASH_CARD':
