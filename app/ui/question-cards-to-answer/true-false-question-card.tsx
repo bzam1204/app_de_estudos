@@ -7,11 +7,10 @@ import { createOrUpdateFibonacciLog } from "../../lib/actions";
 
 interface Props {
     question: Question,
-    questionType: QuestionType
 }
 
 
-const QuestionCardToAnswer: React.FC<Props> = ({ question, questionType }) => {
+const TrueFalseCardToAnswer: React.FC<Props> = ({ question }) => {
     const [result, setResult] = useState<Boolean | null>(null)
 
     console.log('questão: ',question.body,'|| correct: ', question.correctAnswer)
@@ -58,4 +57,4 @@ const QuestionCardToAnswer: React.FC<Props> = ({ question, questionType }) => {
     );
 }
 
-export default QuestionCardToAnswer;
+export default TrueFalseCardToAnswer;

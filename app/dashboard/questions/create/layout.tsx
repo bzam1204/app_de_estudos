@@ -1,4 +1,3 @@
-import QuestionForm from '@/app/ui/question-form';
 import React from 'react';
 
 interface Props {
@@ -6,19 +5,10 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = ({ children }) => {
-    // Implement your component logic here
-
     return (
-
-
-        <div className='flex flex-col gap-4'>
-            <QuestionForm />
+        <section className='flex flex-col w-screen h-full p-4 grow '>
             {children}
-        </div>
-
-
-
-
+        </section>
     );
 };
 

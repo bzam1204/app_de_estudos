@@ -26,7 +26,11 @@ const formats = [
     'image',
 ];
 
-const TextEditor = () => {
+interface Props {
+    ON_KEY_UP?: (e: any) => void;
+}
+
+const TextEditor = ({ ON_KEY_UP }: Props) => {
     const [value, setValue] = useState('');
 
     const handleChange = (content: string, delta: any, source: any, editor: any) => {
@@ -34,9 +38,7 @@ const TextEditor = () => {
     };
 
     return (
-        <div className='w-full'>
-            <ReactQuill className='w-full h-96'  value={value} onChange={handleChange} modules={modules} formats={formats} />
-        </div>
+        <ReactQuill onKeyUp={ON_KEY_UP} className='w-full grow mb-10 ' placeholder='Meu resumo começa assim...' value={value} onChange={handleChange} modules={modules} formats={formats} />
     );
 };
 

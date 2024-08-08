@@ -3,7 +3,7 @@ import Header from '../ui/header';
 
 const MyComponent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
-        <div>
+        <div className='flex flex-col w-full h-full'>
             <Header/>
             {children}
         </div>

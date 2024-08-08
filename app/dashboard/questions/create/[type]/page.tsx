@@ -15,9 +15,9 @@ function MyComponent({ params }: Props) {
     const type = params.type;
 
     return (
-        <div>
+        <>
             {renderQuestionForm(type)}
-        </div>
+        </>
     );
 };
 

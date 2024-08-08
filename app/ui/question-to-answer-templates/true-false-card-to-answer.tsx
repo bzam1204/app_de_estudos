@@ -8,11 +8,10 @@ import { createOrUpdateFibonacciLog } from "@/app/lib/actions";
 
 interface Props {
     question: Question,
-    questionType: QuestionType
     index: number
 }
 
-const TrueFalseCardToAnswer: React.FC<Props> = ({ question, questionType, index }) => {
+const TrueFalseCardToAnswer: React.FC<Props> = ({ question, index }) => {
     const [result, setResult] = useState<Boolean | null>(null)
     const [givenAnswer, setGivenAnswer] = useState<Boolean | null>(null)
     const [showExplanation, setShowExplanation] = useState<Boolean>(false)
