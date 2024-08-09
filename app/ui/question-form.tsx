@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import renderQuestionForm from '@/app/ui/question-form-templates/render-question-form';
+import renderQuestionForm from '@/app/ui/question-forms/render-question-form';
 import { QuestionTypeName } from '@prisma/client';
 import SelectQuestionType from './select-question-type';
 

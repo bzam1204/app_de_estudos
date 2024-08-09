@@ -1,5 +1,5 @@
 'use client'
-import renderQuestionForm from '@/app/ui/question-form-templates/render-question-form';
+import renderQuestionForm from '@/app/ui/question-forms/render-question-form';
 import { QuestionTypeName } from '@prisma/client';
 import React from 'react';
 

@@ -1,7 +1,8 @@
 // Code Generated with love
 import { Question, QuestionTypeName } from '@prisma/client';
-import SummaryQuestionCard from './summary-question-card';
-import TrueFalseCardToAnswer from './true-false-card-to-answer';
+import TrueFalseReadOnlyTemplate from './true-false-read-only-template';
+import SummaryReadOnlyTemplate from './summary-read-only-template';
+
 
 interface Props {
     question: Question;
@@ -10,10 +11,10 @@ interface Props {
     selection: QuestionTypeName | null;
 }
 
-export default function RenderQuestionCard( { question, index, key, selection }: Props) {
+export default function RenderReadOnlyQuestion( { question, index, key, selection }: Props) {
     switch (selection!.toUpperCase()) {
         case 'TRUE_FALSE':
-            return <TrueFalseCardToAnswer question={question} index={index} key={key} />;
+            return <TrueFalseReadOnlyTemplate question={question} key={key} />;
         // case 'FLASH_CARD':
         //     return <FlashCardForm />;
         // case 'MULTIPLE_CHOICE':
@@ -25,7 +26,7 @@ export default function RenderQuestionCard( { question, index, key, selection }:
         // case 'ESSAY':
         //     return <EssayForm />;
         case 'SUMMARY':
-            return <SummaryQuestionCard question={question} index={index} key={key}/>;
+            return <SummaryReadOnlyTemplate question={question} index={index} key={key}/>;
         // case 'ACTION_ITEM':
         //     return <ActionItemForm />;
         // case 'FILL_IN_THE_BLANK':

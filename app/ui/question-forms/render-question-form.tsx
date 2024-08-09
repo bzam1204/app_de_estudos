@@ -1,15 +1,15 @@
 import TrueFalseForm from './true-false-form';
-import ShortAnswerForm from "@/app/ui/question-form-templates/short-answer-form";
-import MultipleChoiceForm from "@/app/ui/question-form-templates/MultipleChoiceForm";
-import FlashCardForm from "@/app/ui/question-form-templates/flash-card-form";
-import MatchingForm from "@/app/ui/question-form-templates/matching-form";
-import EssayForm from "@/app/ui/question-form-templates/essay-form";
-import SummaryForm from "@/app/ui/question-form-templates/summary-form";
-import ActionItemForm from "@/app/ui/question-form-templates/action-item-form";
-import FillInTheBlankForm from "@/app/ui/question-form-templates/fill-in-the-blank-form";
-import MultipleResponseForm from "@/app/ui/question-form-templates/multiple-response-form";
-import OrderingForm from "@/app/ui/question-form-templates/ordering-form";
-import DragAndDropForm from "@/app/ui/question-form-templates/drag-and-drop-form";
+import ShortAnswerForm from "@/app/ui/question-forms/short-answer-form";
+import MultipleChoiceForm from "@/app/ui/question-forms/MultipleChoiceForm";
+import FlashCardForm from "@/app/ui/question-forms/flash-card-form";
+import MatchingForm from "@/app/ui/question-forms/matching-form";
+import EssayForm from "@/app/ui/question-forms/essay-form";
+import SummaryForm from "@/app/ui/question-forms/summary-form";
+import ActionItemForm from "@/app/ui/question-forms/action-item-form";
+import FillInTheBlankForm from "@/app/ui/question-forms/fill-in-the-blank-form";
+import MultipleResponseForm from "@/app/ui/question-forms/multiple-response-form";
+import OrderingForm from "@/app/ui/question-forms/ordering-form";
+import DragAndDropForm from "@/app/ui/question-forms/drag-and-drop-form";
 import { QuestionTypeName } from '@prisma/client';
 
 export default function renderQuestionForm(selection: QuestionTypeName) {

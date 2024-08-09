@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import TextEditor from "../text-editor";
+import TextEditor from "../text-editor/text-editor";
 import { useFormState, useFormStatus } from "react-dom";
 import Button from "../button";
 import { createQuestion } from "@/app/lib/actions";

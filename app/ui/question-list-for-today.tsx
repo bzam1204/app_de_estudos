@@ -1,7 +1,7 @@
 import React from "react";
-import TrueFalseCardToAnswer from "./question-to-answer-templates/true-false-card-to-answer";
+import TrueFalseCardToAnswer from "./question-to-answer-templates/true-false-to-answer-template";
 import { getQuestionsForToday } from "@/app/lib/data";
-import RenderQuestionCard from "./question-to-answer-templates/render-question-card";
+import RenderQuestionCard from "./question-to-answer-templates/render-to-answer-question";
 
 const QuestionListForToday: React.FC = async () => {
     const todaysQuestionList = await getQuestionsForToday('dashboard/todays-list')
