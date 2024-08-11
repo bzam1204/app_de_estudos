@@ -134,61 +134,93 @@ async function deleteQuestionWithRelations(questionId: string) {
     return transaction;
 }
 
+/**
+ * Calculates the nth Fibonacci number.
+ * 
+ * The Fibonacci sequence is a series of numbers where each number is the sum of the two preceding ones,
+ * usually starting with 0 and 1. That is, F(0) = 0, F(1) = 1, F(n) = F(n - 1) + F(n - 2) for n > 1.
+ * 
+ * @param {number} n - The position in the Fibonacci sequence to calculate.
+ * @returns {number} - The Fibonacci number at position n.
+ */
 function fibonacci(n: number): number {
+    // Base case: if n is 0 or 1, return n
     if (n <= 1) {
         return n;
     }
+    // Recursive case: return the sum of the two preceding Fibonacci numbers
     return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-export async function createOrUpdateFibonacciLog(
-    questionId: string,
-    userId: string,
-    result?: any
-): Promise<void> {
-    // Verificar se a questão existe
-    const question: Question | null = await prisma.question.findUnique({
+class NotFoundError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "NotFoundError";
+    }
+}
+
+class ValidationError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "ValidationError";
+    }
+}
+
+async function getQuestionById(questionId: string): Promise<Question | null> {
+    return await prisma.question.findUnique({
         where: { id: questionId },
     });
+}
 
-    if (!question) {
-        throw new Error(`Question with id ${questionId} does not exist.`);
-    }
+async function getLatestLog(
+    questionId: string,
+    userId: string
+): Promise<FibonacciQuestionLog | null> {
+    return await prisma.fibonacciQuestionLog.findFirst({
+        where: { questionId, userId },
+        orderBy: { fibonacciIndex: "desc" },
+    });
+}
 
-    // Obter o log de revisão mais recente para esta questão e usuário
-    const latestLog: FibonacciQuestionLog | null =
-        await prisma.fibonacciQuestionLog.findFirst({
-            where: { questionId, userId },
-            orderBy: { fibonacciIndex: "desc" },
-        });
+function calculateNextFibonacciIndex(
+    latestLog: FibonacciQuestionLog | null
+): number {
+    return latestLog ? latestLog.fibonacciIndex + 1 : 0;
+}
 
-    // Determinar o próximo índice de Fibonacci
-    const nextFibonacciIndex: number = latestLog
-        ? latestLog.fibonacciIndex + 1
-        : 0;
-    const nextFibValue = fibonacci(nextFibonacciIndex);
-
-    // Calcular a próxima data de revisão com base no índice de Fibonacci
-    const nextRevisionDate: Date = new Date();
-
-    if (!latestLog) {
-        nextRevisionDate.setDate(nextRevisionDate.getDate());
-    } else {
+function calculateNextRevisionDate(
+    latestLog: FibonacciQuestionLog | null,
+    nextFibValue: number
+): Date {
+    const nextRevisionDate = new Date();
+    if (latestLog) {
         nextRevisionDate.setDate(nextRevisionDate.getDate() + nextFibValue);
-
-        await prisma.fibonacciQuestionLog.update({
-            where: { id: latestLog.id },
-            data: {
-                done: true,
-                result: result,
-            },
-        });
     }
-
     nextRevisionDate.setHours(0, 0, 0, 0);
+    return nextRevisionDate;
+}
 
-    // Criar ou atualizar o log de revisão
-    await prisma.fibonacciQuestionLog.upsert({
+async function updateLatestLog(
+    latestLog: FibonacciQuestionLog,
+    result: any
+): Promise<void> {
+    await prisma.fibonacciQuestionLog.update({
+        where: { id: latestLog.id },
+        data: {
+            done: true,
+            result: result,
+        },
+    });
+}
+
+async function upsertFibonacciLog(
+    questionId: string,
+    userId: string,
+    nextFibonacciIndex: number,
+    nextRevisionDate: Date,
+    questionTypeId: string
+): Promise<FibonacciQuestionLog> {
+    return await prisma.fibonacciQuestionLog.upsert({
         where: {
             questionId_userId_fibonacciIndex: {
                 questionId,
@@ -205,8 +237,54 @@ export async function createOrUpdateFibonacciLog(
             userId,
             fibonacciIndex: nextFibonacciIndex,
             nextRevisionDate,
-            questionTypeId: question.typeId,
+            questionTypeId: questionTypeId,
         },
     });
 }
 
+export async function createOrUpdateFibonacciLog(
+    questionId: string,
+    userId: string,
+    result?: null | Boolean | undefined
+): Promise<void> {
+    try {
+        const question = await getQuestionById(questionId);
+        if (!question) {
+            throw new NotFoundError(
+                `Question with id ${questionId} does not exist.`
+            );
+        }
+
+        const latestLog = await getLatestLog(questionId, userId);
+        const nextFibonacciIndex = calculateNextFibonacciIndex(latestLog);
+        const nextFibValue = fibonacci(nextFibonacciIndex);
+        const nextRevisionDate = calculateNextRevisionDate(
+            latestLog,
+            nextFibValue
+        );
+
+        if (latestLog) {
+            await updateLatestLog(latestLog, result);
+        }
+
+        const newLog = await upsertFibonacciLog(
+            questionId,
+            userId,
+            nextFibonacciIndex,
+            nextRevisionDate,
+            question.typeId
+        );
+
+        console.log("newLog", newLog);
+    } catch (error) {
+        if (
+            error instanceof NotFoundError ||
+            error instanceof ValidationError
+        ) {
+            console.error(error.message);
+        } else {
+            console.error("An unexpected error occurred:", error);
+        }
+        throw error;
+    }
+}
