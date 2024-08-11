@@ -25,7 +25,7 @@ export default function RenderQuestionCard( { question, index, key, selection }:
         // case 'ESSAY':
         //     return <EssayForm />;
         case 'SUMMARY':
-            return <SummaryQuestionCard question={question} index={index} key={key}/>;
+            return <SummaryQuestionCard question={question}  key={key}/>;
         // case 'ACTION_ITEM':
         //     return <ActionItemForm />;
         // case 'FILL_IN_THE_BLANK':

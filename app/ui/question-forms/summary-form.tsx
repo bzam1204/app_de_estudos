@@ -27,7 +27,6 @@ const SummaryForm = () => {
             <input hidden type="text" name="explanation" value={'nonis'} />
             <TextEditor ON_KEY_UP={(e) => {
                 setTextBody(e.target.innerHTML);
-                console.log(e.target.innerHTML);
             }} />
 
             <SubmitButton />

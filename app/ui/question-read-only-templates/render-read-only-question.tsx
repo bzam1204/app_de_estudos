@@ -26,7 +26,7 @@ export default function RenderReadOnlyQuestion( { question, index, key, selectio
         // case 'ESSAY':
         //     return <EssayForm />;
         case 'SUMMARY':
-            return <SummaryReadOnlyTemplate question={question} index={index} key={key}/>;
+            return <SummaryReadOnlyTemplate question={question}  key={key}/>;
         // case 'ACTION_ITEM':
         //     return <ActionItemForm />;
         // case 'FILL_IN_THE_BLANK':

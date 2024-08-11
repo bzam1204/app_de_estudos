@@ -3,7 +3,6 @@ import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
 
-
 interface Props {
     ON_KEY_UP?: (e: any) => void;
 }
@@ -43,6 +42,10 @@ const TextEditor = ({ ON_KEY_UP }: Props) => {
             </div>
             <div onKeyUp={ON_KEY_UP} ref={quillRef} className="ql-container ql-snow" style={{ height: '300px' }}></div>
         </div>
+
+        // <ReactQuill className='no-border' theme="snow" value={value} onChange={setValue} style={{height: '300px'}}>
+        //     <div className="my-editing-area"></div>
+        // </ReactQuill>
     );
 };
 

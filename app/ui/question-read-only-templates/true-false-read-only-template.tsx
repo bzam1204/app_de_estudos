@@ -6,14 +6,15 @@ import React from 'react';
 
 import { useFormState, useFormStatus } from 'react-dom';
 
-interface SubmitButtonProps {
-    _onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+export interface SubmitButtonProps {
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    className?: string;
 }
 
-function SubmitButton({ _onClick }: SubmitButtonProps) {
+export function SubmitButton({ onClick, className }: SubmitButtonProps) {
     const { pending } = useFormStatus();
     return (
-        <button disabled={pending} type='submit' aria-label={"delete question"} onClick={_onClick}>
+        <button className={className} disabled={pending} type='submit' aria-label={"delete question"} onClick={onClick}>
             {pending ?
                 <ArrowPathIcon className='animate-spin' width={20} /> :
                 <TrashIcon width={20} />}
@@ -25,15 +26,17 @@ interface QuestionProps {
     question: Question
 }
 
+export function handleDeleteClick(event: React.MouseEvent<HTMLButtonElement>) {
+    const isConfirmed = window.confirm("Tem certeza de que deseja deletar esta questão?");
+    if (!isConfirmed) {
+        event.preventDefault();
+    }
+};
+
 const TrueFalseReadOnlyTemplate: React.FC<QuestionProps> = ({ question }) => {
     const [state, formAction] = useFormState(deleteQuestion, undefined)
 
-    function handleDeleteClick(event: React.MouseEvent<HTMLButtonElement>) {
-        const isConfirmed = window.confirm("Tem certeza de que deseja deletar esta questão?");
-        if (!isConfirmed) {
-            event.preventDefault();
-        }
-    };
+
 
     return (
         <div
@@ -42,7 +45,7 @@ const TrueFalseReadOnlyTemplate: React.FC<QuestionProps> = ({ question }) => {
             <p>{question.body}</p>
             <form action={formAction} className='flex flex-col gap-3 justify-around'>
                 <input type="text" name='id' readOnly hidden value={question.id} />
-                <SubmitButton _onClick={handleDeleteClick} />
+                <SubmitButton onClick={handleDeleteClick} />
                 {/* <button type='submit' aria-label={"delete question"} onClick={handleDeleteClick}>
                     {pending ?
                         <ArrowPathIcon className='animate-spin' width={20} /> :
