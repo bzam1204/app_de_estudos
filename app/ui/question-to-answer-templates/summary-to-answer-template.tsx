@@ -22,7 +22,7 @@ export function SubmitButton({ answerButtonPressed, isSummaryRead }: SubmitButto
     const { pending } = useFormStatus();
 
     return (
-        <button disabled={answerButtonPressed} className={clsx('w-fit absolute h-fit p-1 ${shadowGen} justify-center border-transparent   rounded-full px-2  flex gap-2 font-bold text-gray-700 transition hover:border-amber-500 border-2 hover:bg-amber-500 hover:text-white active:border-amber-500 active:text-amber-500 active:bg-white', isSummaryRead ? 'hover:drop-shadow-md bg-gray-100 pointer-events-none' : 'drop-shadow-md bg-white ')} type='submit' >
+        <button disabled={answerButtonPressed} className={clsx('w-fit absolute h-fit p-1 ${shadowGen} justify-center border-transparent   rounded-full px-2  flex gap-2 font-bold text-gray-700 transition hover:border-amber-500 border-2 hover:bg-amber-500 hover:text-white active:border-amber-500 active:text-amber-500 active:bg-white', isSummaryRead ? 'hover:drop-shadow-md bg-gray-50 pointer-events-none' : 'drop-shadow-md bg-white ')} type='submit' >
 
             {pending ? <>
                 <ArrowPathIcon className='animate-spin' width={20} />
@@ -71,7 +71,7 @@ const SummaryReadOnlyTemplate: React.FC<SummaryReadOnlyTemplateProps> = ({ quest
             <div className='grow'></div>
             <div
                 key={key}
-                className="flex flex-col bg-gray-100 gap-4 w-full justify-between max-w-screen-md transition-all  hover:rounded-r duration-200  p-4 border-gray-300 hover:border-amber-400 border-l-2 hover:drop-shadow-md hover:bg-white "
+                className="flex flex-col bg-gray-50  gap-4 w-full justify-between max-w-screen-md transition-all  hover:rounded-r duration-200  p-4 border-gray-300 hover:border-amber-400 border-l-2 hover:drop-shadow-md hover:bg-white "
             >
                 <h2 className='text-3xl'>{question.title}</h2>
                 <TextReader content={question.body} />

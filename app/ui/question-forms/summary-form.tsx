@@ -1,15 +1,28 @@
-import React, { useEffect } from "react";
+import React from "react";
 import TextEditor from "../text-editor/text-editor";
 import { useFormState, useFormStatus } from "react-dom";
-import Button from "../button";
 import { createQuestion } from "@/app/lib/actions";
-import { BookmarkIcon } from "@heroicons/react/24/outline";
 import { inter } from "../fonts";
+import { Button } from "../button";
+import { BookCheck, BookmarkPlus, BookUp, BookUp2Icon, LoaderCircle } from 'lucide-react'
 
-function SubmitButton() {
+export function SubmitButton({ _pending }: { _pending?: Boolean }) {
+    if (typeof _pending !== 'undefined') {
+        return (
+            <Button className="gap-2 w-fit" size='lg'>
+                {_pending ? <LoaderCircle className="animate-spin" size={16} /> : <BookUp size={16} />} Criar Resumo
+
+            </Button>
+        )
+    }
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { pending } = useFormStatus();
     return (
-        <Button label="Criar Resumo" pending={pending} Icon={BookmarkIcon} />
+        <Button className="gap-2 w-fit text-md" size='lg'>
+            {pending ? <LoaderCircle className="animate-spin" size={18} /> : <BookCheck size={18} />} Criar Resumo
+
+        </Button>
     );
 
 }

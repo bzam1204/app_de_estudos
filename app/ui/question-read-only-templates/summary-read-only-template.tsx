@@ -33,7 +33,7 @@ const SummaryReadOnlyTemplate: React.FC<SummaryReadOnlyTemplateProps> = ({ quest
             <div className='grow'></div>
             <div
                 key={key}
-                className="flex flex-col bg-gray-100 gap-4 w-full justify-between max-w-screen-md transition-all  hover:rounded-r duration-200  p-4 border-gray-300 hover:border-amber-400 border-l-2 hover:drop-shadow-md hover:bg-white "
+                className="flex flex-col bg-gray-50  gap-4 w-full justify-between max-w-screen-md transition-all  hover:rounded-r duration-200  p-4 border-gray-300 hover:border-amber-400 border-l-2 hover:drop-shadow-md hover:bg-white "
             >
                 <h2 className='text-3xl'>{question.title}</h2>
                 <TextReader content={question.body} />

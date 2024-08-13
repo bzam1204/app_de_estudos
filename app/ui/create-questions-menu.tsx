@@ -4,13 +4,15 @@ import { DocumentPlusIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { ReactElement } from 'react'
+import { LucideProps } from 'lucide-react'
 
 const callsToAction: Object[] = [
     //   { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
     //   { name: 'Contact sales', href: '#', icon: PhoneIcon },
 ]
 
-export default function NavItem() {
+export default function NavItem({ Icon, label }: { Icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>, label: string }) {
     const lang = 'portuguese'
     const pathname = usePathname()
     const questionTypePath = pathname.split("/")
@@ -19,8 +21,8 @@ export default function NavItem() {
             <PopoverButton className={clsx("flex gap-2 transition-all  transition-delay-500  rounded font-bold active:outline-none text-gray-800 hover:text-amber-500 px-2 py-1", {
                 'bg-gray-400  hover:text-white hover:bg-amber-500    text-white': pathname.includes('/dashboard/questions/create'),
             })}>
-                <DocumentPlusIcon width={20} />
-                Criar Questão
+                <Icon width={20} />
+                {label}
                 {/* {pathname.includes('create') && <span className="">{questionTypePath[questionTypePath.length - 1]}</span>} */}
             </PopoverButton>
 
