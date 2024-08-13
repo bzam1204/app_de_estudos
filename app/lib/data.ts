@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function getQuestions(path?: string) {
     try {
         if (path) revalidatePath(path);
-        return await prisma.question.findMany({ include: { type: true } });
+        return await prisma.question.findMany({ include: { type: true }, orderBy: { createdAt: "desc" } });
     } catch (error) {
         // Handle the error here
         console.error("Error retrieving questions:", error);
