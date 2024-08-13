@@ -1,10 +1,8 @@
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { questionTypesLabels } from '../lib/questionTypesLabels'
-import { DocumentPlusIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { ReactElement } from 'react'
 import { LucideProps } from 'lucide-react'
 
 const callsToAction: Object[] = [

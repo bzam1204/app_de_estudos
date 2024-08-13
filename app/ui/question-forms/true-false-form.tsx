@@ -4,11 +4,12 @@ import React from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import {Button} from "../button";
 import { SubmitButton } from "./summary-form";
+import { Binary, Plus, ToggleLeft } from "lucide-react";
 
 function SubmitBtn() {
 const { pending } = useFormStatus();
     return (
-        <SubmitButton _pending={pending} />
+        <SubmitButton _pending={pending} Icon={ToggleLeft} label="Criar Questão"  />
     );
 }
 

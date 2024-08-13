@@ -1,4 +1,5 @@
 import { AdjustmentsHorizontalIcon,  BoltIcon, BookOpenIcon, BookmarkIcon,  CheckCircleIcon, ForwardIcon, HandRaisedIcon, ListBulletIcon, RectangleStackIcon,  SquaresPlusIcon, ViewColumnsIcon, ViewfinderCircleIcon } from "@heroicons/react/24/outline";
+import { ToggleLeft } from "lucide-react";
 
 export const questionTypesLabels = [
     {
@@ -8,7 +9,7 @@ export const questionTypesLabels = [
             portuguese: "Determinar se a afirmação é verdadeira ou falsa.",
         },
         href: "true_false",
-        icon: CheckCircleIcon,
+        icon: ToggleLeft,
 
         label: { english: "True or False", portuguese: "Verdadeiro ou Falso" },
     },
