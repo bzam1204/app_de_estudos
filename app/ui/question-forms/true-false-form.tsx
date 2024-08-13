@@ -2,12 +2,13 @@ import { createQuestion } from "@/app/lib/actions";
 import { ArrowPathIcon, PlusCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import Button from "../button";
+import {Button} from "../button";
+import { SubmitButton } from "./summary-form";
 
-function SubmitButton() {
+function SubmitBtn() {
 const { pending } = useFormStatus();
     return (
-        <Button pending={pending} />
+        <SubmitButton _pending={pending} />
     );
 }
 
@@ -64,7 +65,7 @@ export default function TrueFalseForm() {
                     Criar Questão
                 </button> */}
 
-                <SubmitButton />
+                <SubmitBtn />
 
                 {state?.message && <p className="mt-2 text-sm text-green-500">{state.message}</p>}
             </form>
