@@ -4,13 +4,13 @@ import { useFormState, useFormStatus } from "react-dom";
 import { createQuestion } from "@/app/lib/actions";
 import { inter } from "../fonts";
 import { Button } from "../button";
-import { BookCheck, BookmarkPlus, BookUp, BookUp2Icon, LoaderCircle } from 'lucide-react'
+import { BookCheck, BookUp, LoaderCircle, LucideProps } from 'lucide-react'
 
-export function SubmitButton({ _pending }: { _pending?: Boolean }) {
+export function SubmitButton({ _pending, label, Icon }: { _pending?: Boolean, label: string, Icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>> }) {
     if (typeof _pending !== 'undefined') {
         return (
             <Button className="gap-2 w-fit" size='lg'>
-                {_pending ? <LoaderCircle className="animate-spin" size={16} /> : <BookUp size={16} />} Criar Resumo
+                {_pending ? <LoaderCircle className="animate-spin" size={16} /> : <Icon size={16} />} {label}
 
             </Button>
         )
@@ -42,7 +42,7 @@ const SummaryForm = () => {
                 setTextBody(e.target.innerHTML);
             }} />
 
-            <SubmitButton />
+            <SubmitButton Icon={BookUp} label="Criar Resumo" />
             {state?.message && <p className="mt-2 text-sm text-green-500">{state.message}</p>}
 
         </form>
