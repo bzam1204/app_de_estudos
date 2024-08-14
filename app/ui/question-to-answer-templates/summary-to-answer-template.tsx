@@ -7,7 +7,7 @@ import { ArrowPathIcon, BookOpenIcon, CheckIcon } from '@heroicons/react/24/outl
 import clsx from 'clsx';
 
 const TextReader = dynamic(() => import('../../ui/text-editor/text-reader'), { ssr: false });
-interface SummaryReadOnlyTemplateProps {
+interface SummaryToAnswerTemplateProps {
     question: any;
     key: number;
 }
@@ -44,7 +44,7 @@ export function SubmitButton({ answerButtonPressed, isSummaryRead }: SubmitButto
     );
 }
 
-const SummaryReadOnlyTemplate: React.FC<SummaryReadOnlyTemplateProps> = ({ question, key }) => {
+const SummaryToAnswerTemplate: React.FC<SummaryToAnswerTemplateProps> = ({ question, key }) => {
     const [state, formAction] = useFormState(handleAnswerQuestion, undefined)
     const [showDeleteIcon, setShowDeleteIcon] = useState<Boolean>(false)
     const [answerButtonPressed, setAnswerButtonPressed] = useState<boolean>(false)
@@ -86,7 +86,7 @@ const SummaryReadOnlyTemplate: React.FC<SummaryReadOnlyTemplateProps> = ({ quest
         </div>
     );
 };
-export default SummaryReadOnlyTemplate;
+export default SummaryToAnswerTemplate;
 
 
 
