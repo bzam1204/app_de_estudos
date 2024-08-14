@@ -2,6 +2,7 @@
 import { Question, QuestionTypeName } from '@prisma/client';
 import TrueFalseReadOnlyTemplate from './true-false-read-only-template';
 import SummaryReadOnlyTemplate from './summary-read-only-template';
+import FlashCardReadOnlyTemplate from './flashcard-read-only-template';
 
 
 interface Props {
@@ -11,12 +12,12 @@ interface Props {
     selection: QuestionTypeName | null;
 }
 
-export default function RenderReadOnlyQuestion( { question, index, key, selection }: Props) {
+export default function RenderReadOnlyQuestion({ question, index, key, selection }: Props) {
     switch (selection!.toUpperCase()) {
         case 'TRUE_FALSE':
             return <TrueFalseReadOnlyTemplate question={question} key={key} />;
-        // case 'FLASH_CARD':
-        //     return <FlashCardForm />;
+        case 'FLASH_CARD':
+            return <FlashCardReadOnlyTemplate backContent={question.explanation} frontContent={question.body} key={key} />;
         // case 'MULTIPLE_CHOICE':
         //     return <MultipleChoiceForm />;
         // case 'SHORT_ANSWER':
@@ -26,7 +27,7 @@ export default function RenderReadOnlyQuestion( { question, index, key, selectio
         // case 'ESSAY':
         //     return <EssayForm />;
         case 'SUMMARY':
-            return <SummaryReadOnlyTemplate question={question}  key={key}/>;
+            return <SummaryReadOnlyTemplate question={question} key={key} />;
         // case 'ACTION_ITEM':
         //     return <ActionItemForm />;
         // case 'FILL_IN_THE_BLANK':
