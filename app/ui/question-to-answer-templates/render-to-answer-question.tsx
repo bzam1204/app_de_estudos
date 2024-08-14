@@ -1,7 +1,8 @@
 // Code Generated with love
 import { Question, QuestionTypeName } from '@prisma/client';
-import SummaryQuestionCard from './summary-to-answer-template';
 import TrueFalseCardToAnswer from './true-false-to-answer-template';
+import SummaryToAnswerTemplate from './summary-to-answer-template';
+import FlashCardToAnswerTemplate from './flashcard-to-answer-template';
 
 interface Props {
     question: Question;
@@ -14,8 +15,8 @@ export default function RenderQuestionCard( { question, index, key, selection }:
     switch (selection!.toUpperCase()) {
         case 'TRUE_FALSE':
             return <TrueFalseCardToAnswer question={question} index={index} key={key} />;
-        // case 'FLASH_CARD':
-        //     return <FlashCardForm />;
+        case 'FLASH_CARD':
+            return <FlashCardToAnswerTemplate backContent={question.explanation} frontContent={question.body} />;
         // case 'MULTIPLE_CHOICE':
         //     return <MultipleChoiceForm />;
         // case 'SHORT_ANSWER':
@@ -25,7 +26,7 @@ export default function RenderQuestionCard( { question, index, key, selection }:
         // case 'ESSAY':
         //     return <EssayForm />;
         case 'SUMMARY':
-            return <SummaryQuestionCard question={question}  key={key}/>;
+            return <SummaryToAnswerTemplate question={question}  key={key}/>;
         // case 'ACTION_ITEM':
         //     return <ActionItemForm />;
         // case 'FILL_IN_THE_BLANK':
