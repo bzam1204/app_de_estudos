@@ -8,7 +8,9 @@
         "heroicons",
         "ossp",
         "postgres",
-        "tailwindcss"
+        "tailwindcss",
+        "tiptap",
+        "Tiptap"
     ],
     "WillLuke.nextjs.addTypesOnSave": true,
     "WillLuke.nextjs.hasPrompted": true,
