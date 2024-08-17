@@ -4,19 +4,28 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { motion } from "framer-motion";
 import clsx from "clsx";
+import { createOrUpdateFibonacciLog } from "@/app/lib/actions";
+import { Question } from "@prisma/client";
 
 
-const FlashCardToAnswerTemplate = ({ frontContent, backContent }: { frontContent: string, backContent: string }) => {
+const FlashCardToAnswerTemplate = ({ frontContent, backContent, question }: { frontContent: string, backContent: string, question: Question }) => {
     const [isFlipped, setIsFlipped] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [reviewed, setReviewed] = React.useState(false);
 
-    function handleFlip() {
+    async function handleFlip() {
         if (!isAnimating) {
             setIsAnimating(true);
             setIsFlipped(!isFlipped);
         }
-        if (!reviewed) setTimeout(() => setReviewed(true), 700);
+        if (!reviewed) {
+            try {
+                await createOrUpdateFibonacciLog(question.id, question.userId).then(() => setTimeout(() => setReviewed(true), 700));
+            } catch (error) {
+                console.error("Error occurred while creating/updating Fibonacci log:", error);
+            }
+
+        }
     }
 
     // Editor instance for rendering content
