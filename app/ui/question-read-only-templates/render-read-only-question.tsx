@@ -17,7 +17,7 @@ export default function RenderReadOnlyQuestion({ question, index, key, selection
         case 'TRUE_FALSE':
             return <TrueFalseReadOnlyTemplate question={question} key={key} />;
         case 'FLASH_CARD':
-            return <FlashCardReadOnlyTemplate backContent={question.explanation} frontContent={question.body} key={key} />;
+            return <FlashCardReadOnlyTemplate question={question} key={key} />;
         // case 'MULTIPLE_CHOICE':
         //     return <MultipleChoiceForm />;
         // case 'SHORT_ANSWER':

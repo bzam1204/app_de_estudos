@@ -1,42 +1,87 @@
 'use client'
-import React from "react";
+import React, { useState } from "react";
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import { motion } from "framer-motion";
+import clsx from "clsx";
+import { SubmitButton } from "./true-false-read-only-template";
 import { useFormState } from "react-dom";
-import { createQuestion } from "@/app/lib/actions";
+import { deleteQuestion } from "@/app/lib/actions";
+import { Question } from "@prisma/client";
 
 
-const FlashCardReadOnlyTemplate = ({frontContent, backContent}: {frontContent: string, backContent: string}) => {
-    const [state, formAction] = useFormState(createQuestion, undefined);
+const FlashCardReadOnlyTemplate = ({ question }: { question: Question }) => {
+    const [isFlipped, setIsFlipped] = React.useState(false);
+    const [isAnimating, setIsAnimating] = React.useState(false);
+    const [showDeleteIcon, setShowDeleteIcon] = useState<Boolean>(false)
+    const [state, formAction] = useFormState(deleteQuestion, undefined)
 
+
+
+    function handleFlip() {
+        if (!isAnimating) {
+            setIsAnimating(true);
+            setIsFlipped(!isFlipped);
+        }
+    }
+
+    function handleDeleteClick(event: React.MouseEvent<HTMLButtonElement>) {
+        const isConfirmed = window.confirm("Tem certeza de que deseja deletar esta questão?");
+        if (!isConfirmed) {
+            event.preventDefault();
+        }
+        setShowDeleteIcon(true)
+    };
 
     // Editor instance for rendering content
     const frontEditor = useEditor({
         extensions: [StarterKit],
-        content: frontContent,
+        content: question.body,
         editable: false, // Make it non-editable
     });
 
     const backEditor = useEditor({
         extensions: [StarterKit],
-        content: backContent,
+        content: question.explanation,
         editable: false, // Make it non-editable
     });
 
+    const flipCardTailwind = clsx(
+        "rounded-md p-4 cursor-pointer w-full h-full absolute bg-gray-200",
+    )
+
     return (
-        <div>
-            {/* Apresentação do Conteúdo com TipTap */}
-            <div className="mt-8">
-                <h2 className="text-xl font-bold">Conteúdo do Cartão</h2>
-                <div className="mt-4">
-                    <h3 className="font-semibold">Frente:</h3>
-                    <EditorContent content={frontContent} editor={frontEditor} />
-                </div>
-                <div className="mt-4">
-                    <h3 className="font-semibold">Explicação:</h3>
-                    <EditorContent content={backContent} editor={backEditor} />
-                </div>
+        <div className="flex items-center justify-center  w-full "
+            onMouseEnter={() => setShowDeleteIcon(true)}
+            onMouseLeave={() => setShowDeleteIcon(false)}>
+                        <div className='grow'></div>
+            <div className="flip-card  flex justify-center items-center w-full max-w-screen-sm h-[25rem] drop-shadow-sm " onClick={handleFlip}>
+
+                {/* Apresentação do Conteúdo com TipTap */}
+                <motion.div
+                    initial={false}
+                    className=" flip-card-inner w-full h-full"
+                    animate={{ rotateY: isFlipped ? 180 : 360 }}
+                    transition={{ duration: 0.6, animationDirection: 'normal' }}
+                    onAnimationComplete={() => setIsAnimating(false)}
+                >
+                    <div className={flipCardTailwind + ' flip-card-front '}>
+                        <EditorContent content={question.body} editor={frontEditor} />
+                    </div>
+
+
+                    <div className={flipCardTailwind + ' flip-card-back overflow-y-scroll'}>
+                        <EditorContent content={question.explanation} editor={backEditor} />
+                    </div>
+                </motion.div>
+                <div className='grow'></div>
             </div>
+            <form action={formAction} className='flex flex-col gap-3 justify-around grow'>
+                <input type="text" name='id' readOnly hidden value={question.id} />
+                {showDeleteIcon && (
+                    <SubmitButton className=' w-fit absolute h-fit p-1 drop-shadow-md justify-center border-transparent  bg-white  rounded-full  flex gap-2 font-bold text-gray-700 transition hover:border-amber-500 border-2 hover:bg-amber-500 hover:text-white active:border-amber-500 active:text-amber-500 active:bg-white' onClick={handleDeleteClick} />
+                )}
+            </form>
         </div>
     );
 };

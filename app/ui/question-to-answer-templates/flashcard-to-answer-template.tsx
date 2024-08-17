@@ -2,13 +2,22 @@
 import React from "react";
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useFormState } from "react-dom";
-import { createQuestion } from "@/app/lib/actions";
+import { motion } from "framer-motion";
+import clsx from "clsx";
 
 
-const FlashCardToAnswerTemplate = ({frontContent, backContent}: {frontContent: string, backContent: string}) => {
-    const [state, formAction] = useFormState(createQuestion, undefined);
+const FlashCardToAnswerTemplate = ({ frontContent, backContent }: { frontContent: string, backContent: string }) => {
+    const [isFlipped, setIsFlipped] = React.useState(false);
+    const [isAnimating, setIsAnimating] = React.useState(false);
+    const [reviewed, setReviewed] = React.useState(false);
 
+    function handleFlip() {
+        if (!isAnimating) {
+            setIsAnimating(true);
+            setIsFlipped(!isFlipped);
+        }
+        if (!reviewed) setTimeout(() => setReviewed(true), 700);
+    }
 
     // Editor instance for rendering content
     const frontEditor = useEditor({
@@ -23,19 +32,32 @@ const FlashCardToAnswerTemplate = ({frontContent, backContent}: {frontContent: s
         editable: false, // Make it non-editable
     });
 
+    const flipCardTailwind = clsx(
+        "rounded-md p-4 cursor-pointer w-full h-full absolute",
+        reviewed ? 'bg-amber-200  ' : 'bg-gray-200'
+    )
+
     return (
-        <div>
-            {/* Apresentação do Conteúdo com TipTap */}
-            <div className="mt-8">
-                <h2 className="text-xl font-bold">Conteúdo do Cartão</h2>
-                <div className="mt-4">
-                    <h3 className="font-semibold">Frente:</h3>
-                    <EditorContent content={frontContent} editor={frontEditor} />
-                </div>
-                <div className="mt-4">
-                    <h3 className="font-semibold">Explicação:</h3>
-                    <EditorContent content={backContent} editor={backEditor} />
-                </div>
+        <div className="flex items-center justify-center  w-full ">
+            <div className="flip-card  flex justify-center items-center w-full max-w-screen-sm h-[25rem] drop-shadow-sm " onClick={handleFlip}>
+
+                {/* Apresentação do Conteúdo com TipTap */}
+                <motion.div
+                    initial={false}
+                    className=" flip-card-inner w-full h-full"
+                    animate={{ rotateY: isFlipped ? 180 : 360 }}
+                    transition={{ duration: 0.6, animationDirection: 'normal' }}
+                    onAnimationComplete={() => setIsAnimating(false)}
+                >
+                    <div className={flipCardTailwind + ' flip-card-front '}>
+                        <EditorContent content={frontContent} editor={frontEditor} />
+                    </div>
+
+
+                    <div className={flipCardTailwind + ' flip-card-back overflow-y-scroll'}>
+                        <EditorContent content={backContent} editor={backEditor} />
+                    </div>
+                </motion.div>
             </div>
         </div>
     );
