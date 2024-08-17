@@ -11,12 +11,12 @@ interface Props {
     selection: QuestionTypeName | null;
 }
 
-export default function RenderQuestionCard( { question, index, key, selection }: Props) {
+export default function RenderQuestionCard({ question, index, key, selection }: Props) {
     switch (selection!.toUpperCase()) {
         case 'TRUE_FALSE':
             return <TrueFalseCardToAnswer question={question} index={index} key={key} />;
         case 'FLASH_CARD':
-            return <FlashCardToAnswerTemplate backContent={question.explanation} frontContent={question.body} />;
+            return <FlashCardToAnswerTemplate question={question} backContent={question.explanation} frontContent={question.body} />;
         // case 'MULTIPLE_CHOICE':
         //     return <MultipleChoiceForm />;
         // case 'SHORT_ANSWER':
@@ -26,7 +26,7 @@ export default function RenderQuestionCard( { question, index, key, selection }:
         // case 'ESSAY':
         //     return <EssayForm />;
         case 'SUMMARY':
-            return <SummaryToAnswerTemplate question={question}  key={key}/>;
+            return <SummaryToAnswerTemplate question={question} key={key} />;
         // case 'ACTION_ITEM':
         //     return <ActionItemForm />;
         // case 'FILL_IN_THE_BLANK':
