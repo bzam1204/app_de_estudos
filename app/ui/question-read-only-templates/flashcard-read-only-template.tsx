@@ -16,8 +16,6 @@ const FlashCardReadOnlyTemplate = ({ question }: { question: Question }) => {
     const [showDeleteIcon, setShowDeleteIcon] = useState<Boolean>(false)
     const [state, formAction] = useFormState(deleteQuestion, undefined)
 
-
-
     function handleFlip() {
         if (!isAnimating) {
             setIsAnimating(true);
@@ -54,10 +52,9 @@ const FlashCardReadOnlyTemplate = ({ question }: { question: Question }) => {
         <div className="flex items-center justify-center  w-full "
             onMouseEnter={() => setShowDeleteIcon(true)}
             onMouseLeave={() => setShowDeleteIcon(false)}>
-                        <div className='grow'></div>
+            <div className='grow'></div>
             <div className="flip-card  flex justify-center items-center w-full max-w-screen-sm h-[25rem] drop-shadow-sm " onClick={handleFlip}>
 
-                {/* Apresentação do Conteúdo com TipTap */}
                 <motion.div
                     initial={false}
                     className=" flip-card-inner w-full h-full"
@@ -70,7 +67,7 @@ const FlashCardReadOnlyTemplate = ({ question }: { question: Question }) => {
                     </div>
 
 
-                    <div className={flipCardTailwind + ' flip-card-back overflow-y-scroll'}>
+                    <div className={flipCardTailwind + ' flip-card-back  overflow-y-auto default-scrollbar'}>
                         <EditorContent content={question.explanation} editor={backEditor} />
                     </div>
                 </motion.div>
