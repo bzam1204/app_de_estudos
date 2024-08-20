@@ -58,12 +58,12 @@ const FlashCardToAnswerTemplate = ({ frontContent, backContent, question }: { fr
                     transition={{ duration: 0.6, animationDirection: 'normal' }}
                     onAnimationComplete={() => setIsAnimating(false)}
                 >
-                    <div className={flipCardTailwind + ' flip-card-front '}>
+                    <div className={flipCardTailwind + ' flip-card-front  '}>
                         <EditorContent content={frontContent} editor={frontEditor} />
                     </div>
 
 
-                    <div className={flipCardTailwind + ' flip-card-back overflow-y-scroll'}>
+                    <div className={flipCardTailwind + ' flip-card-back overflow-y-auto default-scrollbar '}>
                         <EditorContent content={backContent} editor={backEditor} />
                     </div>
                 </motion.div>
