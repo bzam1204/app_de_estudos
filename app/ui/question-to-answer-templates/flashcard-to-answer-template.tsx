@@ -55,7 +55,7 @@ const FlashCardToAnswerTemplate = ({ frontContent, backContent, question }: { fr
                     initial={false}
                     className=" flip-card-inner w-full h-full"
                     animate={{ rotateY: isFlipped ? 180 : 360 }}
-                    transition={{ duration: 0.6, animationDirection: 'normal' }}
+                    transition={{ duration: 0.2, animationDirection: 'normal' }}
                     onAnimationComplete={() => setIsAnimating(false)}
                 >
                     <div className={flipCardTailwind + ' flip-card-front  '}>
