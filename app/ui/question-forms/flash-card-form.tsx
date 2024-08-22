@@ -1,14 +1,17 @@
 'use client'
 import React, { useEffect } from "react";
-import Tiptap from "../text-editor/tip-tap";
+import dynamic from 'next/dynamic';
+
+const Tiptap = dynamic(() => import('../text-editor/tip-tap'), { ssr: false });
+
+import StarterKit from '@tiptap/starter-kit';
+import clsx from "clsx";
 import { SubmitButton } from "./summary-form";
 import { CirclePlus } from "lucide-react";
 import { useFormState, useFormStatus } from "react-dom";
 import { createQuestion } from "@/app/lib/actions";
 import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
 import { motion } from "framer-motion";
-import clsx from "clsx";
 
 
 const SubmitBtn = () => {
@@ -39,19 +42,24 @@ const FlashCardForm = () => {
         const frontEditor = useEditor({
             extensions: [StarterKit],
             content: frontContent,
-            editable: false, // Make it non-editable
+
+            editable: false, 
+            immediatelyRender: false,
         });
 
         const backEditor = useEditor({
             extensions: [StarterKit],
             content: backContent,
-            editable: false, // Make it non-editable
+            editable: false, 
+            immediatelyRender: false,
         });
 
         const flipCardTailwind = clsx(
             "rounded-md p-4 cursor-pointer w-full h-full absolute bg-gray-200",
 
         )
+
+
 
         return (
             <div className="flex items-center justify-center  w-full grow ">
