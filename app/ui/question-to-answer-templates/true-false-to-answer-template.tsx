@@ -111,7 +111,7 @@ const TrueFalseCardToAnswer: React.FC<Props> = ({ question, index }) => {
                     </button>
                 </div>
                 {showExplanation && (
-                    <Tooltip text={question.explanation} />
+                    <Tooltip text={question.explanation ?? ""} />
                 )}
 
             </div>
