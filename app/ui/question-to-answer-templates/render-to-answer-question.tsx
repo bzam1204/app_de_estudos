@@ -16,7 +16,7 @@ export default function RenderQuestionCard({ question, index, key, selection }: 
         case 'TRUE_FALSE':
             return <TrueFalseCardToAnswer question={question} index={index} key={key} />;
         case 'FLASH_CARD':
-            return <FlashCardToAnswerTemplate question={question} backContent={question.explanation} frontContent={question.body} />;
+            return <FlashCardToAnswerTemplate question={question} backContent={question.explanation ?? ""} frontContent={question.body} />;
         // case 'MULTIPLE_CHOICE':
         //     return <MultipleChoiceForm />;
         // case 'SHORT_ANSWER':
