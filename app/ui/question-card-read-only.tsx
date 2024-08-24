@@ -7,7 +7,7 @@ import { deleteQuestion } from '../lib/actions';
 const QuestionCardReadOnly: React.FC<Question> = ({ id, body }) => {
     const [state, formAction, isPending] = useActionState(deleteQuestion, undefined)
 
-    const handleDeleteClick = (event) => {
+    const handleDeleteClick = (event: any) => {
         const isConfirmed = window.confirm("Tem certeza de que deseja deletar esta questão?");
         if (!isConfirmed) {
             event.preventDefault();
@@ -20,7 +20,7 @@ const QuestionCardReadOnly: React.FC<Question> = ({ id, body }) => {
         >
             <p>{body}</p>
             <form action={formAction} className='flex flex-col gap-3 justify-around'>
-                <input type="text" name='id' hidden value={id} />
+                <input type="text" name='id' readOnly hidden value={id} />
                 <button type='submit' aria-label={"delete question"} onClick={handleDeleteClick}>
                     {isPending ?
                         <ArrowPathIcon className='animate-spin' width={20} /> :

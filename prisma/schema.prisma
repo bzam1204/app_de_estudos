@@ -92,6 +92,8 @@ model FibonacciQuestionLog {
   questionTypeId   String
   fibonacciIndex   Int
   nextRevisionDate DateTime
+  done             Boolean      @default(false)
+  result           Boolean?
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
   question         Question     @relation(fields: [questionId], references: [id])

@@ -88,6 +88,12 @@ export async function deleteQuestion(prevState: any, formData: FormData) {
 
         // If the question exists, proceed to delete it
 
+        await prisma.fibonacciQuestionLog.deleteMany({
+            where: {
+                questionId: questionId,
+            },
+        });
+
         if (question.type.name === "MULTIPLE_CHOICE") {
             // If the question is of type "Multiple Choice",
             // delete the question along with its relations
@@ -97,6 +103,8 @@ export async function deleteQuestion(prevState: any, formData: FormData) {
             // delete the question without its relations
             await deleteQuestionWithoutRelations(questionId);
         }
+
+        
 
         revalidatePath("/dashboard/questions");
         // Return a success response
@@ -156,6 +164,12 @@ async function deleteQuestionWithRelations(questionId: string) {
     return transaction;
 }
 
+const getTodayDate = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Zera as horas para comparar apenas a data
+    return today;
+};
+
 const fibonacci = (num: number): number[] => {
     let fib: number[] = [0, 1];
     while (true) {
@@ -168,8 +182,25 @@ const fibonacci = (num: number): number[] => {
 
 export async function createOrUpdateFibonacciLog(
     questionId: string,
-    userId: string
+    userId: string,
+    result: any | null | undefined
 ): Promise<void> {
+    console.log(
+        "dados: " + " | question_id: ",
+        questionId,
+        " | user id: ",
+        userId
+    );
+
+    // Verificar se a questão existe
+    const question: Question | null = await prisma.question.findUnique({
+        where: { id: questionId },
+    });
+
+    if (!question) {
+        throw new Error(`Question with id ${questionId} does not exist.`);
+    }
+
     // Obter o log de revisão mais recente para esta questão e usuário
     const latestLog: FibonacciQuestionLog | null =
         await prisma.fibonacciQuestionLog.findFirst({
@@ -185,7 +216,30 @@ export async function createOrUpdateFibonacciLog(
 
     // Calcular a próxima data de revisão com base no índice de Fibonacci
     const nextRevisionDate: Date = new Date();
-    nextRevisionDate.setDate(nextRevisionDate.getDate() + nextFibValue);
+
+    console.log("latest log: ", latestLog);
+
+    if (!latestLog) {
+        console.log(
+            "primeira vez: ",
+            nextRevisionDate.setDate(nextRevisionDate.getDate())
+        );
+        nextRevisionDate.setDate(nextRevisionDate.getDate());
+    } else {
+        console.log(
+            "segunda em diante: ",
+            nextRevisionDate.setDate(nextRevisionDate.getDate() + nextFibValue)
+        );
+        nextRevisionDate.setDate(nextRevisionDate.getDate() + nextFibValue);
+
+        await prisma.fibonacciQuestionLog.update({
+            where: { id: latestLog.id },
+            data: {
+                done: true,
+                result: result,
+            },
+        });
+    }
 
     // Criar ou atualizar o log de revisão
     await prisma.fibonacciQuestionLog.upsert({
@@ -205,6 +259,28 @@ export async function createOrUpdateFibonacciLog(
             userId,
             fibonacciIndex: nextFibonacciIndex,
             nextRevisionDate,
+            questionTypeId: question.typeId,
         },
     });
 }
+
+export const getQuestionsForToday = async () => {
+    const today = getTodayDate();
+
+    const logs = await prisma.fibonacciQuestionLog.findMany({
+        where: {
+            userId: "clz3g43fz00049moixkx337j8",
+            done: false,
+            nextRevisionDate: {
+                gte: today,
+                lt: new Date(today.getTime() + 24 * 60 * 60 * 1000), // Adiciona 1 dia para pegar o fim do dia atual
+            },
+        },
+        include: {
+            question: true, // Inclui os detalhes da questão
+            QuestionType: true,
+        },
+    });
+
+    return logs;
+};
