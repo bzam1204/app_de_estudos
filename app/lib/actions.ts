@@ -241,6 +241,8 @@ export async function createOrUpdateFibonacciLog(
         });
     }
 
+    nextRevisionDate.setHours(0,0,0,0)
+
     // Criar ou atualizar o log de revisão
     await prisma.fibonacciQuestionLog.upsert({
         where: {

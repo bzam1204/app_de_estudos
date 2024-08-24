@@ -91,7 +91,7 @@ model FibonacciQuestionLog {
   userId           String
   questionTypeId   String
   fibonacciIndex   Int
-  nextRevisionDate DateTime
+  nextRevisionDate DateTime     @db.Date
   done             Boolean      @default(false)
   result           Boolean?
   createdAt        DateTime     @default(now())
